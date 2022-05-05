@@ -6,7 +6,11 @@ sail artisan breeze:install
 sail npm install
 sail npm run dev
 sail php artisan migrate
-sail php artisan migrate:refresh
+
+down()を実行後にup()を実行
+sail php artisan migrate:refresh --seed
+全テーブル削除してup()を実行
+sail php artisan migrate:fresh --seed
 
 sail npm run watch
 
@@ -21,6 +25,13 @@ sail artisan make:model Owner -m
 sail artisan make:model Admin -m
 sail artisan make:migration create_owner_password_resets
 sail artisan make:migration create_admin_password_resets
+
+sail artisan storage:link
+
+sail artisan make:controller Admin/OwnersController --resource
+sail artisan make:seeder AdminSeeder
+sail artisan make:seeder OwnerSeeder
+sail artisan db:seed
 -->
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>

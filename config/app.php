@@ -185,7 +185,8 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Intervention\Image\ImageServiceProvider::class,
+        
         /*
          * Application Service Providers...
          */
@@ -196,6 +197,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         
         App\Providers\SampleServiceProvider::class,
+        
     ],
 
     /*
@@ -211,6 +213,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        // Imageだとバッティングするので変更
+        'InterventionImage' => Intervention\Image\Facades\Image::class
     ])->toArray(),
 
 ];

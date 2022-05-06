@@ -32,6 +32,37 @@ sail artisan make:controller Admin/OwnersController --resource
 sail artisan make:seeder AdminSeeder
 sail artisan make:seeder OwnerSeeder
 sail artisan db:seed
+
+sail artisan vendor:publish --tag=laravel-pagination
+
+sail artisan make:model Shop -m
+sail artisan make:seed ShopSeeder
+
+sail artisan tinker
+
+sail artisan make:controller Owner/ShopController
+
+sail artisan vendor:publish --tag=laravel-errors
+
+sail composer require intervention/image
+
+sail artisan make:request UploadImageRequest
+
+mkdir app/Services
+sail artisan make:model Image -m
+sail artisan make:controller Owner/ImageController --resource
+
+sail artisan make:seed ImageSeeder
+
+sail artisan make:model PrimaryCategory -m
+sail artisan make:model SecondaryCategory
+
+sail artisan make:seed CategorySeeder
+
+sail artisan make:model Product -m
+sail artisan make:controller Owner/ProductController --resource
+
+sail artisan make:seed ProductSeeder
 -->
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>

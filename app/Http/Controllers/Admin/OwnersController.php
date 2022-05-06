@@ -72,11 +72,11 @@ class OwnersController extends Controller
         }
 
         return redirect()
-        ->route('admin.owners.index')
-        ->with([
-            'message' => 'オーナー登録を実施しました。',
-            'status' => "info",
-        ]);
+            ->route('admin.owners.index')
+            ->with([
+                'message' => 'オーナー登録を実施しました。',
+                'status' => "info",
+            ]);
     }
 
     public function show($id)

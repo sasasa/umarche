@@ -7,10 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop;
 use App\Models\SecondaryCategory;
 use App\Models\Image;
+use App\Models\Stock;
 
 class Product extends Model
 {
     use HasFactory;
+    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'shop_id',
+        'name',
+        'information',
+        "price",
+        'is_selling',
+        "sort_order",
+        'secondary_category_id',
+        'image1',
+        'image2',
+        'image3',
+        'image4',
+    ];
 
     public function shop()
     {
@@ -21,5 +41,9 @@ class Product extends Model
     }
     public function imageFirst(){
         return $this->belongsTo(Image::class, 'image1', 'id');
+    }
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
     }
 }

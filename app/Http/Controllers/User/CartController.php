@@ -6,14 +6,86 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Throwable;
 use Illuminate\Support\Facades\Log;
-
+use App\Constants\Common as Constant;
 class CartController extends Controller
 {
+    public function cancel(Request $request){
+        foreach(Auth::user()->products as $product) {
+            Stock::create([
+                'product_id' => $product->id,
+                'type' => Constant::PRODUCT_LIST['add'],
+                'quantity' => $product->pivot->quantity
+            ]);
+        }
+        return redirect()->
+            route("user.cart.index")->
+            with([
+                'message' => "購入をキャンセルしました。",
+                'status' => "info",
+            ]);;
+        
+    }
+    public function success(Request $request)
+    {
+        Cart::where("user_id", Auth::id())->delete();
+        return redirect()->
+            route("user.items.index")->
+            with([
+                'message' => "ありがとうございました。購入しました。",
+                'status' => "info",
+            ]);;
+    }
+    public function checkout(Request $request)
+    {
+        $user = Auth::user();
+        $products = $user->products;
+        $lineItems = [];
+        foreach($products as $product) {
+            $quantity = null;
+            $quantity = Stock::where('product_id', $product->id)->sum('quantity');
+            if($product->pivot->quantity > $quantity) {
+                return redirect()->
+                    route('user.cart.index')->
+                    with([
+                        'message' => "在庫が足りません。",
+                        'status' => "info",
+                    ]);
+            }
+            $lineItem = [
+                'name' => $product->name,
+                'description' => $product->information,
+                'amount' => $product->price,
+                'currency' => 'jpy',
+                'quantity' => $product->pivot->quantity,
+            ];
+            $lineItems[] = $lineItem;
+        }
+        foreach($products as $product) {
+            Stock::create([
+                'product_id' => $product->id,
+                'type' => Constant::PRODUCT_LIST["reduce"],
+                "quantity" => $product->pivot->quantity * -1,
+            ]);
+        }
+        // dd('test');
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [$lineItems],
+            "mode" => "payment",
+            'success_url' => route("user.cart.success"),
+            'cancel_url' => route("user.cart.cancel"),
+        ]);
+        $publicKey = env('STRIPE_PUBLIC_KEY');
+        return view('user.checkout', compact('session', 'publicKey'));
+    }
+    
     public function add(Request $request)
     {
         $itemInCart = Cart::where('product_id', $request->product_id)->where('user_id', Auth::id())->first();

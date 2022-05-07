@@ -78,7 +78,7 @@ class ProductController extends Controller
                 ]);
                 Stock::create([
                     'product_id' => $product->id,
-                    'type' => 1,
+                    'type' => Constant::PRODUCT_LIST["add"],
                     "quantity" => $request->quantity,
                 ]);
             }, 2);

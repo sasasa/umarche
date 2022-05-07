@@ -9,6 +9,7 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <div class="p-6 bg-white border-b border-gray-200">
+                <x-flash-message status="session('status')" />
                 @if(count($products) > 0)
                   @foreach($products as $product)
                     <div class="md:flex md:items-center mb-2">
@@ -41,7 +42,17 @@
                       </div>
                     </div>
                   @endforeach
-                  合計金額: {{ $totalPrice }}
+                  <div class="my-2">
+                    小計: {{ number_format($totalPrice)}}<span class="text-sm text-gray-700">円(税込)</span>
+                  </div>
+                  <div>
+                    <form method="POST" action="{{ route('user.cart.checkout') }}">
+                      @csrf
+                      <button class="ml-auto flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                        購入する
+                      </button>
+                    </form>
+                  </div>
                 @else
                   カートに商品が入っていません。
                 @endif

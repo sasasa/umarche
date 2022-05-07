@@ -9,6 +9,7 @@ use App\Models\SecondaryCategory;
 use App\Models\Image;
 use App\Models\User;
 use App\Models\Stock;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -56,9 +57,26 @@ class Product extends Model
     {
         return $this->hasMany(Stock::class);
     }
-
     public function users()
     {
         return $this->belongsToMany(User::class, 'carts')->withPivot(['id', 'quantity']);
+    }
+
+    public function scopeAvailableItems($query)
+    {
+        $stocks_subquery = Stock::select('product_id', DB::raw('sum(quantity) as sum_quantity'))
+        ->groupBy('product_id')
+        ->having('sum_quantity', '>', 1);
+
+        $products_query = $query->with(['category','imageFirst',])
+        ->joinSub($stocks_subquery, 'stocks', function($join){
+            $join->on('products.id', '=', 'stocks.product_id');
+        })
+        ->join('shops', 'products.shop_id', '=', 'shops.id')
+        ->where('shops.is_selling', true)
+        ->where('products.is_selling', true)
+        ->select('products.id as id', 'products.name as name', 'products.price', 'products.secondary_category_id',
+                'products.sort_order as sort_order','products.information', 'products.image1');
+        return $products_query;
     }
 }

@@ -68,6 +68,14 @@ sail artisan make:model Stock -m
 sail artisan make:seed StockSeeder
 
 npm install micromodal --save
+
+sail artisan make:request ProductRequest
+sail artisan make:seed UserSeeder
+sail artisan make:controller User/ItemController
+
+sail artisan config:clear
+sail artisan make:factory ProductFactory --model=Product
+sail artisan make:factory StockFactory --model=Stock
 -->
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>

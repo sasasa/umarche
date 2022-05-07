@@ -95,7 +95,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'ja',
 
     /*
     |--------------------------------------------------------------------------
@@ -108,7 +108,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'ja_JP',
 
     /*
     |--------------------------------------------------------------------------
@@ -214,7 +214,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         // Imageだとバッティングするので変更
-        'InterventionImage' => Intervention\Image\Facades\Image::class
+        'InterventionImage' => Intervention\Image\Facades\Image::class,
+        "Constant" => App\Constants\Common::class,
     ])->toArray(),
 
 ];

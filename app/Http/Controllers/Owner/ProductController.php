@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Throwable;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\ProductRequest;
+use App\Constants\Common as Constant;
+
 class ProductController extends Controller
 {
     public function __construct()
@@ -43,11 +46,7 @@ class ProductController extends Controller
         return view('owner.products.index', compact('ownerInfo'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $shops = Shop::where('owner_id', Auth::id())->
@@ -59,28 +58,9 @@ class ProductController extends Controller
         return view('owner.products.create', compact('shops', 'images', 'categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'information' => ['required', 'string', 'max:1000'],
-            "price" => ['required', 'integer'],
-            "sort_order" => ['nullable', 'integer'],
-            "quantity" => ['required', 'integer'],
-            'shop_id' => ['required', 'exists:shops,id'],
-            'category' => ['required', 'exists:secondary_categories,id'],
-            'image1' => ['nullable', 'exists:images,id'],
-            'image2' => ['nullable', 'exists:images,id'],
-            'image3' => ['nullable', 'exists:images,id'],
-            'image4' => ['nullable', 'exists:images,id'],
-            'is_selling' => ['required'],
-        ]);
         try {
             DB::transaction(function() use ($request){
                 $product = Product::create([
@@ -115,48 +95,83 @@ class ProductController extends Controller
             ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $quantity = Stock::where('product_id', $product->id)->sum("quantity");
+        $shops = Shop::where('owner_id', Auth::id())->
+            select('id', 'name')->get();
+        $images = Image::where('owner_id', Auth::id())->
+            select('id', 'title', 'filename')->orderBy('updated_at', 'desc')->get();
+        $categories = PrimaryCategory::with('secondaries')->get();
+        return view('owner.products.edit', compact('product', 'quantity', 'shops', 'images', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+
+    public function update(ProductRequest $request, $id)
     {
-        //
+        $request->validate([
+            'current_quantity' => 'required|integer',
+        ]);
+        $product = Product::findOrFail($id);
+        $quantity = Stock::where('product_id', $product->id)->sum("quantity");
+        if($request->current_quantity !== $quantity) {
+            // 楽観ロック、現在値と送られてきた値が異なるときはいったん戻す。
+            // $id = $request->route()->parameter('product');
+            return redirect()->
+                route('owner.products.edit', ['product' => $id])->
+                with([
+                    'message' => '在庫数が変更されています再度確認してください。',
+                    'status' => "alert",
+                ]);;
+        }
+        try {
+            DB::transaction(function() use ($request, $product){
+                
+                $product->name = $request->name;
+                $product->information = $request->information;
+                $product->price = $request->price;
+                $product->sort_order = $request->sort_order;
+                $product->shop_id = $request->shop_id;
+                $product->secondary_category_id = $request->category;
+                $product->image1 = $request->image1;
+                $product->image2 = $request->image2;
+                $product->image3 = $request->image3;
+                $product->image4 = $request->image4;
+                $product->is_selling = $request->is_selling;
+                $product->save();
+                if($request->type === Constant::PRODUCT_LIST["add"]){
+                    $newQuantity = $request->quantity; 
+                } elseif($request->type === Constant::PRODUCT_LIST["reduce"]){
+                    $newQuantity = $request->quantity * -1;
+                }
+                Stock::create([
+                    'product_id' => $product->id,
+                    'quantity' => $newQuantity,
+                    'type' => $request->type,
+                ]);
+            }, 2);
+        } catch(Throwable $e) {
+            Log::error($e);
+            throw $e;
+        }
+        return redirect()
+            ->route('owner.products.index')
+            ->with([
+                'message' => '商品情報を更新しました。',
+                'status' => "info",
+            ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        Product::findOrFail($id)->delete();
+
+        return redirect()->
+            route('owner.products.index')->
+            with([
+                'message' => "商品を削除しました。",
+                'status' => "alert",
+            ]);
     }
 }

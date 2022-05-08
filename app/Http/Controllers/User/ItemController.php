@@ -31,7 +31,7 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         // dd($request);
-        SendThanksMail::dispatch();
+        // SendThanksMail::dispatch();
 
         $products = Product::availableItems()->
             selectCategory($request->category ?? '0')->

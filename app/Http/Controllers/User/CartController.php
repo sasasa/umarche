@@ -13,6 +13,10 @@ use Carbon\Carbon;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 use App\Constants\Common as Constant;
+use App\Services\CartService;
+use App\Jobs\SendThanksMail;
+use App\Jobs\SendOrderedMail;
+
 class CartController extends Controller
 {
     public function cancel(Request $request){
@@ -33,6 +37,14 @@ class CartController extends Controller
     }
     public function success(Request $request)
     {
+        $items = Cart::where("user_id", Auth::id())->get();
+        // dd($items);
+        $products = CartService::getItemsInCart($items);
+        SendThanksMail::dispatch(Auth::user(), $products);
+        foreach($products as $product) {
+            SendOrderedMail::dispatch($product, Auth::user());
+        }
+        
         Cart::where("user_id", Auth::id())->delete();
         return redirect()->
             route("user.items.index")->

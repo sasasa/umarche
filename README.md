@@ -93,7 +93,13 @@ sail artisan queue:table
 
 sail artisan make:job SendThanksMail
 
+ジョブの実行
 sail artisan queue:work
+
+sail artisan make:mail ThanksMail
+
+sail artisan make:mail OrderedMail
+sail artisan make:job SendOrderedMail
 -->
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>

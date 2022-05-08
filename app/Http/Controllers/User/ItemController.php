@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Stock;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use App\Models\PrimaryCategory;
-use App\Mail\TestMail;
-
+use Illuminate\Support\Facades\DB;
+use App\Jobs\SendThanksMail;
 class ItemController extends Controller
 {
     public function __construct()
@@ -33,8 +31,7 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         // dd($request);
-        Mail::to('test@example.com') //受信者の指定
-        ->send(new TestMail()); //Mailableクラス
+        SendThanksMail::dispatch();
 
         $products = Product::availableItems()->
             selectCategory($request->category ?? '0')->

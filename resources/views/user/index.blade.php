@@ -1,11 +1,33 @@
 <x-app-layout>
   <x-slot name="header">
-    <div class="flex justify-between items-center">
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         商品一覧
       </h2>
-      <div>
-        <form method="get" action="{{ route('user.items.index')}}">
+      <form method="get" action="{{ route('user.items.index')}}">
+        <div class="lg:flex lg:justify-around">
+          <div class="lg:flex items-center">
+            <select name="category" id="" class="mb-2 lg:mb-0 lg:mr-2">
+              <option value="0" @if(\Request::get('category') === '0') selected @endif>全て</option>
+              @foreach($categories as $category)
+              <optgroup label="{{ $category->name }}">
+                @foreach($category->secondaries as $secondary)
+                  <option
+                    value="{{ $secondary->id}}"
+                    @if(\Request::get('category') == $secondary->id) selected @endif
+                    >{{ $secondary->name }}</option>
+                @endforeach
+              </optgroup>
+              @endforeach
+            </select>
+            <div class="flex space-x-2 items-center">
+              <div>
+                <input name="keyword" class="border border-gray-500 py-2" type="text" placeholder="キーワードを入力">
+              </div>
+              <div>
+                <button class="ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">検索する</button>
+              </div>
+            </div>
+          </div>
           <div class="flex">
             <div>
               <span class="text-sm">表示順</span><br>
@@ -58,9 +80,9 @@
               </select>
             </div>
           </div>
-          </form>
-      </div>
-    </div>
+        </div>
+      </form>
+
   </x-slot>
 
   <div class="py-12">

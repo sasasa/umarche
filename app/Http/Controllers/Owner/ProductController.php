@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Image;
-use App\Models\SecondaryCategory;
 use App\Models\PrimaryCategory;
 use App\Models\Shop;
 use App\Models\Owner;

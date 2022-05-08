@@ -659,6 +659,10 @@ select {
   margin-left: auto;
   margin-right: auto;
 }
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -666,10 +670,6 @@ select {
 .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
-}
-.my-2 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
 }
 .ml-3 {
   margin-left: 0.75rem;
@@ -710,6 +710,12 @@ select {
 .ml-2 {
   margin-left: 0.5rem;
 }
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.ml-auto {
+  margin-left: auto;
+}
 .mb-12 {
   margin-bottom: 3rem;
 }
@@ -731,11 +737,8 @@ select {
 .mr-3 {
   margin-right: 0.75rem;
 }
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-.ml-auto {
-  margin-left: auto;
+.mr-4 {
+  margin-right: 1rem;
 }
 .block {
   display: block;
@@ -1100,6 +1103,10 @@ select {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
 }
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
 .px-5 {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
@@ -1115,10 +1122,6 @@ select {
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
-}
-.px-6 {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
 }
 .pt-2 {
   padding-top: 0.5rem;
@@ -1776,24 +1779,12 @@ select {
 }
 @media (min-width: 768px) {
 
-  .md\:ml-12 {
-    margin-left: 3rem;
-  }
-
   .md\:ml-2 {
     margin-left: 0.5rem;
   }
 
   .md\:flex {
     display: flex;
-  }
-
-  .md\:w-2\/3 {
-    width: 66.666667%;
-  }
-
-  .md\:w-1\/2 {
-    width: 50%;
   }
 
   .md\:w-3\/12 {
@@ -1806,6 +1797,14 @@ select {
 
   .md\:w-2\/12 {
     width: 16.666667%;
+  }
+
+  .md\:w-2\/3 {
+    width: 66.666667%;
+  }
+
+  .md\:w-1\/2 {
+    width: 50%;
   }
 
   .md\:grid-cols-2 {

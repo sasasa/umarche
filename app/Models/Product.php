@@ -10,7 +10,7 @@ use App\Models\Image;
 use App\Models\User;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
-
+use App\Constants\Common as Constant;
 class Product extends Model
 {
     use HasFactory;
@@ -78,5 +78,23 @@ class Product extends Model
         ->select('products.id as id', 'products.name as name', 'products.price', 'products.secondary_category_id',
                 'products.sort_order as sort_order','products.information', 'products.image1');
         return $products_query;
+    }
+
+    public function scopeSortOrder($query, $sortOrder){
+        if($sortOrder === null || $sortOrder === Constant::SORT_ORDER['recommend']){
+            return $query->orderBy('sort_order', 'asc');
+        }
+        if($sortOrder === Constant::SORT_ORDER['higherPrice']){
+            return $query->orderBy('price', 'desc');
+        }
+        if($sortOrder === Constant::SORT_ORDER['lowerPrice']){
+            return $query->orderBy('price', 'asc');
+        }
+        if($sortOrder === Constant::SORT_ORDER['later']){
+            return $query->orderBy('products.created_at', 'desc');
+        }
+        if($sortOrder === Constant::SORT_ORDER['older']){
+            return $query->orderBy('products.created_at', 'asc');
+        }
     }
 }

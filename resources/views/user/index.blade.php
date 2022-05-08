@@ -21,7 +21,7 @@
             </select>
             <div class="flex space-x-2 items-center">
               <div>
-                <input name="keyword" class="border border-gray-500 py-2" type="text" placeholder="キーワードを入力">
+                <input value="{{ request()->keyword }}" name="keyword" class="border border-gray-500 py-2" type="text" placeholder="キーワードを入力">
               </div>
               <div>
                 <button class="ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">検索する</button>
@@ -108,10 +108,7 @@
                     </div>
                   @endforeach
                 </div>
-                {{ $products->appends([
-                  'sort' => \Request::get('sort'),
-                  'pagination' => \Request::get('pagination'),
-                ])->links() }} 
+                {{ $products->appends(request()->query())->links() }} 
               </div>
           </div>
       </div>

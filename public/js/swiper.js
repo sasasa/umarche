@@ -7948,7 +7948,7 @@ __webpack_require__.r(__webpack_exports__);
 
 swiper__WEBPACK_IMPORTED_MODULE_0__["default"].use([swiper__WEBPACK_IMPORTED_MODULE_1__["default"], swiper__WEBPACK_IMPORTED_MODULE_2__["default"]]); // init Swiper:
 
-var swiper = new swiper__WEBPACK_IMPORTED_MODULE_0__["default"]('.swiper', {
+var swiper = new swiper__WEBPACK_IMPORTED_MODULE_0__["default"]('.swiper-container', {
   // Optional parameters
   // direction: 'vertical',
   loop: true,

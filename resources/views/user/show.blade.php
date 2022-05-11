@@ -14,7 +14,7 @@
                     <div class="md:w-1/2">
                       {{-- <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}" type="products" /> --}}
                       <!-- Slider main container -->
-                      <div class="swiper">
+                      <div class="swiper-container">
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
                           <!-- Slides -->
@@ -102,7 +102,7 @@
           </div>
       </div>
   </div>
-  <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+  <div class="modal micromodal-slide relative z-10" id="modal-1" aria-hidden="true">
     <div class="modal__overlay" tabindex="-1" data-micromodal-close>
       <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
         <header class="modal__header">
@@ -122,7 +122,5 @@
       </div>
     </div>
   </div>
-
   <script src="{{ mix('js/swiper.js') }}"></script>
-  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
 </x-app-layout>

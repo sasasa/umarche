@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Product;
 use App\Models\Stock;
+use App\Models\Image;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -22,12 +23,12 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             UserSeeder::class,
             ShopSeeder::class,
-            ImageSeeder::class,
+            // ImageSeeder::class,
             CategorySeeder::class,
             // ProductSeeder::class,
             // StockSeeder::class,
         ]);
-        Product::factory(100)->create();
+        // Product::factory(100)->create();
         Stock::factory(200)->create();
     }
 }

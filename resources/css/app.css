@@ -1,6 +1,6 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-@import 'micromodal';
-@import 'swiper';
-
+@import 'micromodal.css';
+@import 'swiper/swiper-bundle.css';
+@import 'swiper.css';

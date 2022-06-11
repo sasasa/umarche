@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 use App\Constants\Common as Constant;
+use App\Enums\SortOrder;
+
 class Product extends Model
 {
     use HasFactory;
@@ -81,19 +83,19 @@ class Product extends Model
     }
 
     public function scopeSortOrder($query, $sortOrder){
-        if($sortOrder === null || $sortOrder === Constant::SORT_ORDER['recommend']){
+        if($sortOrder === null || $sortOrder === SortOrder::RECOMMEND->value){
             return $query->orderBy('sort_order', 'asc');
         }
-        if($sortOrder === Constant::SORT_ORDER['higherPrice']){
+        if($sortOrder === SortOrder::HIGHER->value){
             return $query->orderBy('price', 'desc');
         }
-        if($sortOrder === Constant::SORT_ORDER['lowerPrice']){
+        if($sortOrder === SortOrder::LOWER->value){
             return $query->orderBy('price', 'asc');
         }
-        if($sortOrder === Constant::SORT_ORDER['later']){
+        if($sortOrder === SortOrder::LATER->value){
             return $query->orderBy('products.created_at', 'desc');
         }
-        if($sortOrder === Constant::SORT_ORDER['older']){
+        if($sortOrder === SortOrder::OLDER->value){
             return $query->orderBy('products.created_at', 'asc');
         }
     }

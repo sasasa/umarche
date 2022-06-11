@@ -9,6 +9,7 @@ use App\Models\Stock;
 use App\Models\PrimaryCategory;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\SendThanksMail;
+use App\Enums\SortOrder;
 class ItemController extends Controller
 {
     public function __construct()
@@ -39,8 +40,8 @@ class ItemController extends Controller
             sortOrder($request->sort)->
             paginate($request->pagination ?? 20);
         $categories = PrimaryCategory::with('secondaries')->get();
-
-        return view("user.index", compact('products', 'categories'));
+        $orders = SortOrder::cases();
+        return view("user.index", compact('products', 'categories', 'orders'));
     }
 
     public function show($id)

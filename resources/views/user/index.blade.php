@@ -32,31 +32,15 @@
             <div>
               <span class="text-sm">表示順</span><br>
               <select id="sort" name="sort" class="mr-4">
-                <option value="{{ \Constant::SORT_ORDER['recommend']}}"
-                  @if(\Request::get('sort') === \Constant::SORT_ORDER['recommend'] )
+                @foreach($orders as $order)
+                  <option
+                  @if(request()->get('sort') === $order->value )
                     selected
-                  @endif>おすすめ順
-                </option>
-                <option value="{{ \Constant::SORT_ORDER['higherPrice']}}"
-                  @if(\Request::get('sort') === \Constant::SORT_ORDER['higherPrice'] )
-                    selected
-                  @endif>料金の高い順
-                </option>
-                <option value="{{ \Constant::SORT_ORDER['lowerPrice']}}"
-                  @if(\Request::get('sort') === \Constant::SORT_ORDER['lowerPrice'] )
-                    selected
-                  @endif>料金の安い順
-                </option>
-                <option value="{{ \Constant::SORT_ORDER['later']}}"
-                  @if(\Request::get('sort') === \Constant::SORT_ORDER['later'] )
-                    selected
-                  @endif>新しい順
-                </option>
-                <option value="{{ \Constant::SORT_ORDER['older']}}"
-                  @if(\Request::get('sort') === \Constant::SORT_ORDER['older'] )
-                    selected
-                  @endif>古い順
-                </option>
+                  @endif
+                  value="{{ $order->value }}">
+                    {{ $order->label() }}
+                  </option>
+                @endforeach
               </select>
             </div>
             <div>
